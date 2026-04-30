@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria de Arte — ISCTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --violet: #7C3AED;
+      --pink:   #EC4899;
+      --orange: #F97316;
+      --yellow: #FBBF24;
+      --teal:   #14B8A6;
+      --blue:   #3B82F6;
+      --green:  #22C55E;
+      --red:    #EF4444;
+      --bg:     #09090F;
+      --card:   #12121C;
+      --card2:  #1A1A2E;
+      --text:   #FFFFFF;
+      --muted:  #94A3B8;
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Outfit',sans-serif; overflow-x:hidden; }
+
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 20%, rgba(124,58,237,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 90% 80%, rgba(236,72,153,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 40% at 30% 90%, rgba(249,115,22,0.10) 0%, transparent 55%);
+    }
+
+    /* HERO */
+    .hero {
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      position:relative; text-align:center; padding:2rem; overflow:hidden;
+    }
+    .orb {
+      position:absolute; border-radius:50%; filter:blur(70px);
+      animation:orbFloat 9s ease-in-out infinite;
+    }
+    .o1{width:500px;height:500px;background:rgba(124,58,237,0.4);top:-120px;left:-120px;animation-delay:0s;}
+    .o2{width:400px;height:400px;background:rgba(236,72,153,0.35);top:40%;right:-100px;animation-delay:-3s;}
+    .o3{width:350px;height:350px;background:rgba(249,115,22,0.30);bottom:-80px;left:25%;animation-delay:-5s;}
+    .o4{width:280px;height:280px;background:rgba(20,184,166,0.30);top:15%;left:45%;animation-delay:-2s;}
+    .o5{width:200px;height:200px;background:rgba(251,191,36,0.25);bottom:20%;right:10%;animation-delay:-4s;}
+    @keyframes orbFloat {
+      0%,100%{transform:translate(0,0) scale(1);}
+      33%{transform:translate(25px,-18px) scale(1.06);}
+      66%{transform:translate(-18px,12px) scale(0.94);}
+    }
+
+    .hero-content{position:relative;z-index:1;max-width:780px;}
+
+    .badge {
+      display:inline-flex; align-items:center; gap:.5rem;
+      background:linear-gradient(135deg,rgba(124,58,237,.35),rgba(236,72,153,.35));
+      border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(12px);
+      font-size:.72rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+      padding:.5rem 1.5rem; border-radius:100px; margin-bottom:2rem;
+      animation:fadeUp .7s ease both;
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}
+
+    .hero h1 {
+      font-family:'Abril Fatface',serif;
+      font-size:clamp(3.5rem,10vw,8rem); line-height:1.0; margin-bottom:1.5rem;
+      animation:fadeUp .7s .1s ease both;
+      background:linear-gradient(135deg,#fff 0%,#FBBF24 30%,#EC4899 60%,#7C3AED 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    .hero-sub {
+      font-size:1.1rem; color:rgba(255,255,255,.6); line-height:1.8;
+      max-width:520px; margin:0 auto 3rem; animation:fadeUp .7s .2s ease both;
+    }
+
+    .stats {
+      display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap;
+      animation:fadeUp .7s .3s ease both;
+    }
+    .stat {
+      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(10px); border-radius:100px; padding:.6rem 1.5rem;
+      display:flex; align-items:center; gap:.6rem;
+    }
+    .snum {
+      font-family:'Abril Fatface',serif; font-size:1.6rem;
+      background:linear-gradient(135deg,var(--yellow),var(--orange));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .slbl{font-size:.78rem;color:rgba(255,255,255,.5);font-weight:500;}
+
+    .scroll-hint {
+      position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:.5rem;
+      animation:fadeUp .7s .6s ease both;
+    }
+    .scroll-hint span{font-size:.68rem;color:rgba(255,255,255,.35);letter-spacing:.15em;text-transform:uppercase;}
+    .sbar{width:2px;height:50px;background:linear-gradient(to bottom,var(--violet),transparent);border-radius:2px;animation:sbarAnim 2s ease-in-out infinite;}
+    @keyframes sbarAnim{
+      0%{transform:scaleY(0);transform-origin:top;opacity:0;}
+      50%{transform:scaleY(1);transform-origin:top;opacity:1;}
+      100%{transform:scaleY(0);transform-origin:bottom;opacity:0;}
+    }
+
+    /* RAINBOW STRIPE */
+    .stripe{display:flex;gap:0;overflow:hidden;}
+    .sb{flex:1;height:7px;animation:glow 3s ease-in-out infinite;}
+    .sb:nth-child(1){background:var(--violet);animation-delay:0s;}
+    .sb:nth-child(2){background:var(--blue);animation-delay:.2s;}
+    .sb:nth-child(3){background:var(--teal);animation-delay:.4s;}
+    .sb:nth-child(4){background:var(--green);animation-delay:.6s;}
+    .sb:nth-child(5){background:var(--yellow);animation-delay:.8s;}
+    .sb:nth-child(6){background:var(--orange);animation-delay:1s;}
+    .sb:nth-child(7){background:var(--red);animation-delay:1.2s;}
+    .sb:nth-child(8){background:var(--pink);animation-delay:1.4s;}
+    @keyframes glow{0%,100%{filter:brightness(1);}50%{filter:brightness(2);}}
+
+    /* NAV */
+    .nav {
+      position:sticky; top:0; z-index:200;
+      background:rgba(9,9,15,.88); backdrop-filter:blur(24px);
+      border-bottom:1px solid var(--border); padding:.8rem 1.5rem;
+    }
+    .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+    .nav-logo {
+      font-family:'Abril Fatface',serif; font-size:1.25rem; margin-right:auto; white-space:nowrap;
+      background:linear-gradient(135deg,var(--yellow),var(--pink));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .srch {
+      display:flex; align-items:center; gap:.5rem;
+      background:rgba(255,255,255,.05); border:1px solid var(--border);
+      border-radius:10px; padding:.4rem 1rem; min-width:160px; transition:border-color .2s;
+    }
+    .srch:focus-within{border-color:rgba(124,58,237,.5);}
+    .srch input{background:none;border:none;outline:none;color:#fff;font-family:'Outfit',sans-serif;font-size:.85rem;width:100%;}
+    .srch input::placeholder{color:var(--muted);}
+    .fltrs{display:flex;gap:.3rem;flex-wrap:wrap;}
+    .fb {
+      background:rgba(255,255,255,.05); border:1px solid var(--border);
+      color:var(--muted); font-family:'Outfit',sans-serif;
+      font-size:.78rem; font-weight:600; padding:.35rem .9rem;
+      border-radius:100px; cursor:pointer; transition:all .2s;
+    }
+    .fb:hover{color:#fff;border-color:rgba(255,255,255,.2);}
+    .fb.active{background:linear-gradient(135deg,var(--violet),var(--pink));border-color:transparent;color:#fff;}
+    .vbs{display:flex;gap:.3rem;}
+    .vb{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);padding:.35rem .65rem;border-radius:8px;cursor:pointer;font-size:1rem;transition:all .2s;}
+    .vb.active,.vb:hover{color:var(--yellow);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08);}
+
+    /* SECTION HEADER */
+    .sh{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem;}
+    .st{font-family:'Abril Fatface',serif;font-size:clamp(1.6rem,4vw,2.5rem);white-space:nowrap;background:linear-gradient(135deg,#fff,rgba(255,255,255,.65));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .sl{flex:1;height:1px;background:linear-gradient(to right,rgba(255,255,255,.12),transparent);}
+    .stag{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .8rem;border-radius:100px;white-space:nowrap;}
+    .tv{background:rgba(124,58,237,.2);color:#A78BFA;border:1px solid rgba(124,58,237,.3);}
+    .tp{background:rgba(236,72,153,.2);color:#F9A8D4;border:1px solid rgba(236,72,153,.3);}
+    .tt{background:rgba(20,184,166,.2);color:#5EEAD4;border:1px solid rgba(20,184,166,.3);}
+
+    /* SPOTLIGHT */
+    .spot-sec{position:relative;z-index:1;padding:5rem 2rem 3rem;max-width:1400px;margin:0 auto;}
+    .spot-grid{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:auto auto;gap:6px;border-radius:20px;overflow:hidden;}
+    @media(max-width:680px){.spot-grid{grid-template-columns:1fr;}}
+    .sp{position:relative;overflow:hidden;cursor:pointer;}
+    .sp.big{grid-row:span 2;aspect-ratio:3/4;}
+    .sp.sm{aspect-ratio:16/9;}
+    .sp img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.46,.45,.94);display:block;}
+    .sp:hover img{transform:scale(1.07);}
+    .spo{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.1) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;}
+    .spo-name{font-family:'Abril Fatface',serif;font-size:1.3rem;margin-bottom:.2rem;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+    .sp.big .spo-name{font-size:2rem;}
+    .spo-meta{font-size:.72rem;color:rgba(255,255,255,.6);}
+    .sp::after{content:'';position:absolute;inset:0;border:2px solid transparent;border-radius:inherit;transition:border-color .3s;}
+    .sp:hover::after{border-color:rgba(251,191,36,.7);}
+
+    /* GALLERY */
+    .gal-sec{position:relative;z-index:1;padding:4rem 2rem 5rem;max-width:1400px;margin:0 auto;}
+    .masonry{columns:4;column-gap:10px;}
+    @media(max-width:1100px){.masonry{columns:3;}}
+    @media(max-width:720px){.masonry{columns:2;}}
+    @media(max-width:420px){.masonry{columns:1;}}
+    .masonry.lv{columns:1;}
+    .masonry.lv .ac{display:flex;flex-direction:row;height:90px;margin-bottom:8px;}
+    .masonry.lv .ac .ci{width:120px;flex-shrink:0;aspect-ratio:unset;height:90px;}
+    .masonry.lv .ac .cn{flex:1;padding:.8rem 1.1rem;display:flex;flex-direction:column;justify-content:center;}
+
+    .ac {
+      break-inside:avoid; margin-bottom:10px;
+      background:var(--card); border-radius:14px; overflow:hidden;
+      border:1px solid var(--border); cursor:pointer;
+      transition:transform .3s,border-color .3s,box-shadow .3s;
+      animation:cardIn .5s ease both;
+    }
+    .ac:hover{transform:translateY(-6px) scale(1.01);border-color:transparent;box-shadow:0 0 0 2px var(--ca,rgba(124,58,237,.6)),0 24px 60px rgba(0,0,0,.6),0 0 40px var(--cg,rgba(124,58,237,.15));}
+    .ac:nth-child(7n+1){--ca:rgba(124,58,237,.7);--cg:rgba(124,58,237,.2);}
+    .ac:nth-child(7n+2){--ca:rgba(236,72,153,.7);--cg:rgba(236,72,153,.2);}
+    .ac:nth-child(7n+3){--ca:rgba(249,115,22,.7);--cg:rgba(249,115,22,.2);}
+    .ac:nth-child(7n+4){--ca:rgba(251,191,36,.7);--cg:rgba(251,191,36,.2);}
+    .ac:nth-child(7n+5){--ca:rgba(20,184,166,.7);--cg:rgba(20,184,166,.2);}
+    .ac:nth-child(7n+6){--ca:rgba(59,130,246,.7);--cg:rgba(59,130,246,.2);}
+    .ac:nth-child(7n+7){--ca:rgba(34,197,94,.7);--cg:rgba(34,197,94,.2);}
+    .ci{width:100%;aspect-ratio:3/4;overflow:hidden;}
+    .ci img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block;}
+    .ac:hover .ci img{transform:scale(1.07);}
+    .cn{padding:.85rem 1rem;}
+    .ca{font-family:'Abril Fatface',serif;font-size:.95rem;margin-bottom:.3rem;}
+    .cm{display:flex;justify-content:space-between;align-items:center;}
+    .cl{font-size:.7rem;color:var(--muted);}
+    .cy{font-size:.68rem;font-weight:700;background:linear-gradient(135deg,var(--yellow),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nores{text-align:center;padding:5rem;color:var(--muted);font-family:'Abril Fatface',serif;font-size:1.5rem;}
+
+    /* CAROUSEL */
+    .car-sec{position:relative;z-index:1;padding:4rem 0 5rem;background:linear-gradient(180deg,transparent,rgba(124,58,237,.06) 50%,transparent);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .car-in{max-width:1400px;margin:0 auto;padding:0 2rem;}
+    .car-track{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:1rem;scroll-behavior:smooth;margin-top:2.5rem;}
+    .car-track::-webkit-scrollbar{display:none;}
+    .cs{flex:0 0 300px;scroll-snap-align:start;background:var(--card2);border-radius:18px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .3s;position:relative;}
+    .cs::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(236,72,153,.18));}
+    .cs:hover{transform:scale(1.04);border-color:rgba(124,58,237,.5);box-shadow:0 0 30px rgba(124,58,237,.2);}
+    .cs:hover::before{opacity:1;}
+    .cs img{width:100%;height:260px;object-fit:cover;display:block;}
+    .cs-info{padding:1.1rem 1.2rem;position:relative;z-index:1;}
+    .cs-artist{font-family:'Abril Fatface',serif;font-size:1.05rem;margin-bottom:.3rem;}
+    .cs-loc{font-size:.72rem;color:var(--muted);}
+    .car-nav{display:flex;justify-content:center;align-items:center;gap:1rem;margin-top:1.8rem;}
+    .cnbtn{width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:all .25s;background:var(--card2);border:1px solid var(--border);color:#fff;}
+    .cnbtn:hover{background:linear-gradient(135deg,var(--violet),var(--pink));border-color:transparent;box-shadow:0 0 25px rgba(124,58,237,.5);transform:scale(1.1);}
+    .cdots{display:flex;gap:.4rem;}
+    .cdot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .3s;cursor:pointer;}
+    .cdot.on{background:var(--pink);width:22px;border-radius:3px;box-shadow:0 0 10px var(--pink);}
+
+    /* CREDITS */
+    .cred-sec{position:relative;z-index:1;padding:5rem 2rem;max-width:1400px;margin:0 auto;}
+    .cred-intro{font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:2.5rem;line-height:1.8;}
+    .cred-intro strong{color:#fff;}
+    .cred-grid{display:flex;flex-wrap:wrap;gap:1rem;}
+    .cc{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:1.1rem 1.6rem;display:flex;align-items:center;gap:1rem;transition:all .3s;min-width:155px;cursor:default;}
+    .cc:hover{transform:translateY(-5px);border-color:transparent;box-shadow:0 0 0 1px var(--ccc,var(--violet)),0 16px 40px rgba(0,0,0,.4);}
+    .cc:nth-child(1){--ccc:var(--violet);}
+    .cc:nth-child(2){--ccc:var(--pink);}
+    .cc:nth-child(3){--ccc:var(--orange);}
+    .cc:nth-child(4){--ccc:var(--teal);}
+    .cc:nth-child(5){--ccc:var(--yellow);}
+    .cc:nth-child(6){--ccc:var(--blue);}
+    .ci2{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Abril Fatface',serif;font-size:1.2rem;flex-shrink:0;}
+    .cc:nth-child(1) .ci2{background:linear-gradient(135deg,var(--violet),#A78BFA);}
+    .cc:nth-child(2) .ci2{background:linear-gradient(135deg,var(--pink),#FDA4AF);}
+    .cc:nth-child(3) .ci2{background:linear-gradient(135deg,var(--orange),var(--yellow));}
+    .cc:nth-child(4) .ci2{background:linear-gradient(135deg,var(--teal),var(--blue));}
+    .cc:nth-child(5) .ci2{background:linear-gradient(135deg,var(--yellow),var(--green));}
+    .cc:nth-child(6) .ci2{background:linear-gradient(135deg,var(--blue),var(--violet));}
+    .cn2{font-size:1rem;font-weight:600;}
+
+    /* LIGHTBOX */
+    .lb{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:1.5rem;}
+    .lb.on{opacity:1;pointer-events:all;}
+    .lb-wrap{display:flex;gap:2.5rem;align-items:center;max-width:1000px;width:100%;max-height:92vh;}
+    @media(max-width:700px){.lb-wrap{flex-direction:column;overflow-y:auto;}}
+    .lb-img{flex:1;max-height:85vh;object-fit:contain;border-radius:12px;box-shadow:0 0 80px rgba(124,58,237,.3);}
+    .lb-info{width:220px;flex-shrink:0;}
+    @media(max-width:700px){.lb-info{width:100%;}}
+    .lb-artist{font-family:'Abril Fatface',serif;font-size:2rem;line-height:1.15;margin-bottom:.8rem;background:linear-gradient(135deg,#fff,var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .lb-bar{width:40px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--pink));margin-bottom:1.2rem;}
+    .lb-row{margin-bottom:1rem;}
+    .lb-lbl{font-size:.68rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.2rem;}
+    .lb-val{font-size:.92rem;}
+    .lb-close{position:fixed;top:1.2rem;right:1.2rem;background:rgba(255,255,255,.08);border:1px solid var(--border);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .lb-close:hover{background:var(--red);border-color:var(--red);}
+    .lb-side{position:fixed;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;width:100%;padding:0 .8rem;pointer-events:none;}
+    .lb-arr{background:rgba(255,255,255,.08);border:1px solid var(--border);color:#fff;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;pointer-events:all;transition:all .2s;}
+    .lb-arr:hover{background:linear-gradient(135deg,var(--violet),var(--pink));border-color:transparent;box-shadow:0 0 20px rgba(124,58,237,.5);}
+
+    /* FOOTER */
+    footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;background:linear-gradient(to top,rgba(124,58,237,.06),transparent);}
+    .fl{font-family:'Abril Fatface',serif;font-size:2.2rem;margin-bottom:.5rem;background:linear-gradient(135deg,var(--yellow),var(--orange),var(--pink),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .fs{font-size:.8rem;color:var(--muted);margin-bottom:.25rem;}
+    .fh{margin-top:1.2rem;display:flex;justify-content:center;gap:.4rem;}
+    .hrt{font-size:.9rem;animation:hb 1.5s ease-in-out infinite;}
+    .hrt:nth-child(2){animation-delay:.2s;}.hrt:nth-child(3){animation-delay:.4s;}.hrt:nth-child(4){animation-delay:.6s;}.hrt:nth-child(5){animation-delay:.8s;}.hrt:nth-child(6){animation-delay:1s;}
+    @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.35);}}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes cardIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     Para editar: muda o texto dentro das tags
+═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="orb o3"></div><div class="orb o4"></div><div class="orb o5"></div>
+  <div class="hero-content">
+    <div class="badge"><div class="dot"></div>ISCTEM · Maputo, Moçambique</div>
+    <!-- EDITAR: título principal -->
+    <h1>Galeria de Arte</h1>
+    <!-- EDITAR: subtítulo -->
+    <p class="hero-sub">Um catálogo digital das obras criadas pelos alunos do ISCTEM — expressões de criatividade, cultura e visão.</p>
+    <div class="stats">
+      <div class="stat"><span class="snum" id="totalCount">22</span><span class="slbl">Obras</span></div>
+      <div class="stat"><span class="snum">15</span><span class="slbl">Artistas</span></div>
+      <div class="stat"><span class="snum">1</span><span class="slbl">Escola</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Explorar</span><div class="sbar"></div></div>
+</section>
+
+<div class="stripe"><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo">ISCTEM Arte ✦</span>
+    <div class="srch">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="searchInput" type="text" placeholder="Pesquisar artista...">
+    </div>
+    <div class="fltrs">
+      <button class="fb active" data-filter="all">Todos</button>
+      <button class="fb" data-filter="identified">Identificados</button>
+      <button class="fb" data-filter="unidentified">Sem autor</button>
+    </div>
+    <div class="vbs">
+      <button class="vb active" id="gridBtn" title="Grelha">⊞</button>
+      <button class="vb" id="listBtn" title="Lista">☰</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DISPLAY 1: SPOTLIGHT
+     Para editar: muda os onclick="openLightbox(N)"
+     onde N é o índice da obra (0 = primeira, etc.)
+═══════════════════════════════════════════ -->
+<section class="spot-sec">
+  <div class="sh"><h2 class="st">Destaques</h2><div class="sl"></div><span class="stag tv">Display 1 · Spotlight</span></div>
+  <div class="spot-grid">
+    <div class="sp big" onclick="openLightbox(13)">
+      <img src="allirya.jpg" alt="Allirya" loading="lazy">
+      <div class="spo"><div class="spo-name">Allirya</div><div class="spo-meta">ISCTEM · 10/07/2024</div></div>
+    </div>
+    <div class="sp sm" onclick="openLightbox(6)">
+      <img src="miryan.jpg" alt="Miryan" loading="lazy">
+      <div class="spo"><div class="spo-name">Miryan Amaro</div><div class="spo-meta">ISCTEM · 09/07/2024</div></div>
+    </div>
+    <div class="sp sm" onclick="openLightbox(9)">
+      <img src="dylan.jpg" alt="Dylan" loading="lazy">
+      <div class="spo"><div class="spo-name">Dylan Laler</div><div class="spo-meta">ISCTEM · 10/07/2024</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     DISPLAY 2: GALERIA
+     (gerada automaticamente pelo JavaScript)
+═══════════════════════════════════════════ -->
+<section class="gal-sec">
+  <div class="sh"><h2 class="st">Todas as Obras</h2><div class="sl"></div><span class="stag tp">Display 2 · Galeria</span></div>
+  <div class="masonry" id="grid"></div>
+  <div class="nores" id="noResults" style="display:none">Nenhuma obra encontrada.</div>
+</section>
+
+<div class="stripe"><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
+
+<!-- DISPLAY 3: CARROSSEL -->
+<section class="car-sec">
+  <div class="car-in">
+    <div class="sh"><h2 class="st">Explorar</h2><div class="sl"></div><span class="stag tt">Display 3 · Carrossel</span></div>
+    <div class="car-track" id="carTrack"></div>
+    <div class="car-nav">
+      <button class="cnbtn" id="cPrev">←</button>
+      <div class="cdots" id="cDots"></div>
+      <button class="cnbtn" id="cNext">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EQUIPA
+     Para editar: muda os nomes abaixo
+     Para adicionar alguém: copia um bloco <div class="cc">
+═══════════════════════════════════════════ -->
+<section class="cred-sec">
+  <div class="sh"><h2 class="st">Equipa</h2><div class="sl"></div><span class="stag tv">Criadores do Site</span></div>
+  <!-- EDITAR: descrição da equipa -->
+  <p class="cred-intro">Este site foi desenvolvido por alunos do <strong>ISCTEM — Turma 11B2, Grupo 1</strong>.</p>
+  <div class="cred-grid">
+    <!-- EDITAR: nomes dos membros -->
+    <div class="cc"><div class="ci2">N</div><div class="cn2">Nivaldo</div></div>
+    <div class="cc"><div class="ci2">I</div><div class="cn2">Iwanga</div></div>
+    <div class="cc"><div class="ci2">H</div><div class="cn2">Hayden</div></div>
+    <div class="cc"><div class="ci2">A</div><div class="cn2">Aleek</div></div>
+    <div class="cc"><div class="ci2">E</div><div class="cn2">Ellon</div></div>
+    <div class="cc"><div class="ci2">M</div><div class="cn2">Marcos</div></div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <div class="lb-side">
+    <button class="lb-arr" onclick="lbNav(-1)">←</button>
+    <button class="lb-arr" onclick="lbNav(1)">→</button>
+  </div>
+  <div class="lb-wrap">
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <div class="lb-info">
+      <div class="lb-artist" id="lbArtist"></div>
+      <div class="lb-bar"></div>
+      <div class="lb-row"><div class="lb-lbl">Localização</div><div class="lb-val" id="lbLoc"></div></div>
+      <div class="lb-row"><div class="lb-lbl">Data</div><div class="lb-val" id="lbDate"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fl">ISCTEM</div>
+  <!-- EDITAR: texto do rodapé -->
+  <div class="fs">Galeria de Arte Estudantil · Maputo, Moçambique</div>
+  <div class="fs">Desenvolvido por alunos da Turma 11B2 · Grupo 1</div>
+  <div class="fh">
+    <span class="hrt" style="color:#7C3AED">♥</span>
+    <span class="hrt" style="color:#EC4899">♥</span>
+    <span class="hrt" style="color:#F97316">♥</span>
+    <span class="hrt" style="color:#FBBF24">♥</span>
+    <span class="hrt" style="color:#14B8A6">♥</span>
+    <span class="hrt" style="color:#3B82F6">♥</span>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   LISTA DE OBRAS — EDITAR AQUI PARA ADICIONAR/REMOVER OBRAS
+   
+   Cada obra tem:
+     file:       nome do ficheiro da imagem (tem de estar na mesma pasta)
+     artist:     nome do artista
+     date:       data da obra
+     location:   localização
+     identified: true = tem autor  |  false = sem autor
+
+   Para ADICIONAR uma obra: copia uma linha e cola antes do ];
+   Para REMOVER uma obra:   apaga a linha correspondente
+═══════════════════════════════════════════════════════════ */
+const artworks = [
+  { id:0,  file:'hany.jpg',     artist:'Hany',               date:'08/07/2024', location:'ISCTEM', identified:true  },
+  { id:1,  file:'gerson.jpg',   artist:'Gerson',             date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:2,  file:'sekerany.jpg', artist:'Sekerany',           date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:3,  file:'kheyla.jpg',   artist:'Kheyla Pacule',      date:'2024',       location:'ISCTEM', identified:true  },
+  { id:4,  file:'catiza.jpg',   artist:'Catiza',             date:'2025',       location:'ISCTEM', identified:true  },
+  { id:5,  file:'aly.jpg',      artist:'Aly',                date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:6,  file:'miryan.jpg',   artist:'Miryan Amaro',       date:'09/07/2024', location:'ISCTEM', identified:true  },
+  { id:7,  file:'catia.jpg',    artist:'Catia',              date:'08/07/2024', location:'ISCTEM', identified:true  },
+  { id:8,  file:'enzo.jpg',     artist:'Enzo Sousa',         date:'08/07/2024', location:'ISCTEM', identified:true  },
+  { id:9,  file:'dylan.jpg',    artist:'Dylan Laler',        date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:10, file:'shanaya.jpg',  artist:'Shanaya Meto',       date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:11, file:'keya.jpg',     artist:'Keya M.',            date:'2024',       location:'ISCTEM', identified:true  },
+  { id:12, file:'kelvin.jpg',   artist:'Kelvin Muteto',      date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:13, file:'allirya.jpg',  artist:'Allirya',            date:'10/07/2024', location:'ISCTEM', identified:true  },
+  { id:14, file:'hq1.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:15, file:'hq2.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:16, file:'hq3.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:17, file:'hq4.jpg',      artist:'Iracema Pomoya',     date:'01/11/2024', location:'ISCTEM', identified:true  },
+  { id:18, file:'hq5.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:19, file:'hq6.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:20, file:'hq7.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+  { id:21, file:'hq8.jpg',      artist:'Autor desconhecido', date:'—',          location:'ISCTEM', identified:false },
+];
+/* ═══════════════════════════════════════════════════════════ */
+
+  document.getElementById('totalCount').textContent = artworks.length;
+  let lbIdx = 0, currentFilter = 'all', searchTerm = '', filtered = [...artworks];
+
+  function buildGrid(works) {
+    const g = document.getElementById('grid');
+    const nr = document.getElementById('noResults');
+    g.innerHTML = '';
+    if (!works.length) { nr.style.display = 'block'; return; }
+    nr.style.display = 'none';
+    works.forEach((a, i) => {
+      const d = document.createElement('div');
+      d.className = 'ac';
+      d.style.animationDelay = `${i * 0.035}s`;
+      d.innerHTML = `<div class="ci"><img src="${a.file}" alt="${a.artist}" loading="lazy"></div><div class="cn"><div class="ca">${a.artist}</div><div class="cm"><span class="cl">${a.location}</span><span class="cy">${a.date}</span></div></div>`;
+      d.onclick = () => openLightbox(a.id);
+      g.appendChild(d);
+    });
+  }
+
+  function buildCarousel() {
+    const t = document.getElementById('carTrack');
+    const dots = document.getElementById('cDots');
+    artworks.forEach((a, i) => {
+      const s = document.createElement('div');
+      s.className = 'cs';
+      s.innerHTML = `<img src="${a.file}" alt="${a.artist}" loading="lazy"><div class="cs-info"><div class="cs-artist">${a.artist}</div><div class="cs-loc">${a.location} · ${a.date}</div></div>`;
+      s.onclick = () => openLightbox(a.id);
+      t.appendChild(s);
+      if (i < 8) {
+        const dot = document.createElement('div');
+        dot.className = 'cdot' + (i === 0 ? ' on' : '');
+        dot.onclick = () => { t.scrollTo({ left: i * 320, behavior: 'smooth' }); };
+        dots.appendChild(dot);
+      }
+    });
+  }
+
+  const carTrack = document.getElementById('carTrack');
+  document.getElementById('cNext').onclick = () => carTrack.scrollBy({ left: 320, behavior: 'smooth' });
+  document.getElementById('cPrev').onclick = () => carTrack.scrollBy({ left: -320, behavior: 'smooth' });
+  carTrack.addEventListener('scroll', () => {
+    const idx = Math.round(carTrack.scrollLeft / 320);
+    document.querySelectorAll('.cdot').forEach((d, i) => d.classList.toggle('on', i === idx % 8));
+  }, { passive: true });
+
+  function openLightbox(id) {
+    lbIdx = artworks.findIndex(a => a.id === id);
+    showLb(lbIdx);
+    document.getElementById('lb').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  function showLb(idx) {
+    const a = artworks[idx];
+    document.getElementById('lbImg').src = a.file;
+    document.getElementById('lbArtist').textContent = a.artist;
+    document.getElementById('lbLoc').textContent = a.location;
+    document.getElementById('lbDate').textContent = a.date;
+  }
+  function closeLb() { document.getElementById('lb').classList.remove('on'); document.body.style.overflow = ''; }
+  function lbNav(d) { lbIdx = (lbIdx + d + artworks.length) % artworks.length; showLb(lbIdx); }
+  document.getElementById('lb').addEventListener('click', e => { if (e.target === document.getElementById('lb')) closeLb(); });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb').classList.contains('on')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+  });
+
+  function applyFilters() {
+    filtered = artworks.filter(a => {
+      const mf = currentFilter === 'all' || (currentFilter === 'identified' && a.identified) || (currentFilter === 'unidentified' && !a.identified);
+      return mf && a.artist.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    buildGrid(filtered);
+  }
+  document.querySelectorAll('.fb').forEach(b => {
+    b.onclick = () => { document.querySelectorAll('.fb').forEach(x => x.classList.remove('active')); b.classList.add('active'); currentFilter = b.dataset.filter; applyFilters(); };
+  });
+  document.getElementById('searchInput').oninput = e => { searchTerm = e.target.value; applyFilters(); };
+  document.getElementById('gridBtn').onclick = () => { document.getElementById('grid').classList.remove('lv'); document.getElementById('gridBtn').classList.add('active'); document.getElementById('listBtn').classList.remove('active'); };
+  document.getElementById('listBtn').onclick = () => { document.getElementById('grid').classList.add('lv'); document.getElementById('listBtn').classList.add('active'); document.getElementById('gridBtn').classList.remove('active'); };
+
+  buildGrid(artworks);
+  buildCarousel();
+</script>
+</body>
+</html>
